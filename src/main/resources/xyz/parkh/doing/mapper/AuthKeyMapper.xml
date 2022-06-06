@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="xyz.parkh.doing.mapper.AuthKeyMapper">
+
+    <!--  AuthKeyVO : userId / DB tb_authKey USER_ID   -->
+    <!--  AuthKeyVO : crateTime / DB tb_authKey : CREATE_TIME   -->
+    <resultMap type="xyz.parkh.doing.domain.entity.AuthKeyVo" id="authKeySelectRM">
+        <result property="no" column="NO"/>
+        <result property="userId" column="USER_ID"/>
+        <result property="email" column="EMAIL"/>
+        <result property="authKey" column="AUTHKEY"/>
+        <result property="crateTime" column="CREATE_TIME"/>
+        <result property="type" column="TYPE"/>
+    </resultMap>
+
+    <select id="selectByUserIdWithEmail"
+            resultType="xyz.parkh.doing.domain.entity.AuthKeyVo" resultMap="authKeySelectRM">
+        select NO, USER_ID, EMAIL, AUTHKEY, CREATE_TIME, TYPE
+        from tb_authkey
+        where USER_ID = #{userId} AND EMAIL = #{email}
+        ORDER BY CREATE_TIME DESC
+            LIMIT 1;
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="NO" parameterType="xyz.parkh.doing.domain.entity.AuthKeyVo">
+        insert into tb_authkey (NO, USER_ID, EMAIL, AUTHKEY, CREATE_TIME, TYPE)
+        values (#{no}, #{userId}, #{email}, #{authKey}, #{crateTime}, #{type})
+    </insert>
+</mapper>
