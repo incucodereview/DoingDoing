@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="xyz.parkh.doing.mapper.ScheduleMapper">
+
+    <resultMap type="xyz.parkh.doing.domain.entity.ScheduleVo" id="scheduleSelectRM">
+        <result property="no" column="NO"/>
+        <result property="userId" column="USER_ID"/>
+        <result property="title" column="TITLE"/>
+        <result property="content" column="CONTENT"/>
+        <result property="endDate" column="END_DATE"/>
+        <result property="isPublic" column="IS_PUBLIC"/>
+        <result property="isComplete" column="IS_COMPLETE"/>
+    </resultMap>
+
+    <select id="selectByNo" resultType="xyz.parkh.doing.domain.entity.ScheduleVo"
+            resultMap="scheduleSelectRM">
+        select NO, USER_ID, TITLE, CONTENT, END_DATE, IS_PUBLIC, IS_COMPLETE
+        from tb_schedule
+        where no = #{no}
+    </select>
+
+    <select id="selectByUserId" resultType="xyz.parkh.doing.domain.entity.ScheduleVo"
+            resultMap="scheduleSelectRM">
+        select NO, USER_ID, TITLE, CONTENT, END_DATE, IS_PUBLIC, IS_COMPLETE
+        from tb_schedule
+        where USER_ID = #{userId}
+    </select>
+
+    <insert id="insert" parameterType="xyz.parkh.doing.domain.entity.ScheduleVo">
+        -- isPublic, isComplete : Not Null
+        insert into tb_schedule(USER_ID, TITLE, CONTENT, END_DATE
+        <if test="isPublic != null">
+            , IS_PUBLIC
+        </if>
+        <if test="isComplete != null">
+            , IS_COMPLETE
+        </if>
+        )
+        values (#{userId}, #{title}, #{content}, #{endDate}
+        <if test="isPublic != null">
+            , #{isPublic}
+        </if>
+        <if test="isComplete != null">
+            , #{isComplete}
+        </if>
+        )
+    </insert>
+
+    <update id="update" parameterType="xyz.parkh.doing.domain.entity.ScheduleVo">
+        update tb_schedule
+        <set>
+            <if test="title != null">TITLE = #{title},</if>
+            <if test="content != null">CONTENT = #{content},</if>
+            <if test="endDate != null">END_DATE = #{endDate},</if>
+            <if test="isPublic != null">IS_PUBLIC = #{isPublic},</if>
+            <if test="isComplete != null">IS_COMPLETE = #{isComplete}</if>
+        </set>
+        where NO = #{no}
+    </update>
+
+    <delete id="delete">
+        DELETE
+        FROM tb_schedule
+        WHERE NO = #{no}
+    </delete>
+
+
+</mapper>

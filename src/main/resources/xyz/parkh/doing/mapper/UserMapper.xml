@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="xyz.parkh.doing.mapper.UserMapper">
+
+    <!--  UserVo : userId / DB user : USER_ID   -->
+    <resultMap type="xyz.parkh.doing.domain.entity.UserVo" id="userSelectRM">
+        <result property="userId" column="USER_ID"/>
+        <result property="name" column="NAME"/>
+        <result property="email" column="EMAIL"/>
+        <result property="company" column="COMPANY"/>
+    </resultMap>
+
+    <select id="selectByUserId" resultType="xyz.parkh.doing.domain.entity.UserVo" resultMap="userSelectRM">
+        select USER_ID, NAME, EMAIL, COMPANY
+        from tb_user
+        where USER_ID = #{userId}
+    </select>
+
+    <select id="selectByEmail" resultType="xyz.parkh.doing.domain.entity.UserVo" resultMap="userSelectRM">
+        select USER_ID, NAME, EMAIL, COMPANY
+        from tb_user
+        where EMAIL = #{email}
+    </select>
+
+    <select id="selectAll" resultType="xyz.parkh.doing.domain.entity.UserVo">
+        select USER_ID, NAME, EMAIL, COMPANY
+        from tb_user
+    </select>
+
+    <insert id="insert" parameterType="xyz.parkh.doing.domain.entity.UserVo">
+        insert into tb_user (USER_ID, NAME, EMAIL, COMPANY)
+        values (#{userId}, #{name}, #{email}, #{company})
+    </insert>
+
+    <delete id="delete">
+        delete
+        from tb_user
+        where USER_ID = #{userId}
+    </delete>
+
+    <update id="update" parameterType="xyz.parkh.doing.domain.entity.UserVo">
+        update tb_user
+        <set>
+            <if test="name != null">NAME = #{name},</if>
+            <if test="email != null">EMAIL = #{email},</if>
+            <if test="company != null">COMPANY = #{company},</if>
+        </set>
+        where USER_ID = #{userId}
+    </update>
+
+</mapper>
